@@ -65,7 +65,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutPanel1.Size = new Size(571, 359);
+            tableLayoutPanel1.Size = new Size(524, 321);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblPanels
@@ -76,7 +76,7 @@
             lblPanels.Location = new Point(8, 5);
             lblPanels.Name = "lblPanels";
             lblPanels.Padding = new Padding(0, 10, 0, 0);
-            lblPanels.Size = new Size(555, 40);
+            lblPanels.Size = new Size(508, 40);
             lblPanels.TabIndex = 0;
             lblPanels.Text = "Panels";
             // 
@@ -88,45 +88,51 @@
             listBoxPanels.ItemHeight = 15;
             listBoxPanels.Location = new Point(8, 48);
             listBoxPanels.Name = "listBoxPanels";
-            listBoxPanels.Size = new Size(273, 223);
+            listBoxPanels.Size = new Size(249, 185);
             listBoxPanels.TabIndex = 1;
+            listBoxPanels.SelectedIndexChanged += listBoxPanels_SelectedIndexChanged;
             // 
             // btnNew
             // 
             btnNew.Dock = DockStyle.Fill;
-            btnNew.Location = new Point(8, 277);
+            btnNew.Location = new Point(8, 239);
             btnNew.Name = "btnNew";
-            btnNew.Size = new Size(87, 34);
+            btnNew.Size = new Size(79, 34);
             btnNew.TabIndex = 2;
             btnNew.Text = "New";
             btnNew.UseVisualStyleBackColor = true;
+            btnNew.Click += btnNew_Click;
             // 
             // btnModify
             // 
             btnModify.Dock = DockStyle.Fill;
-            btnModify.Location = new Point(101, 277);
+            btnModify.Enabled = false;
+            btnModify.Location = new Point(93, 239);
             btnModify.Name = "btnModify";
-            btnModify.Size = new Size(87, 34);
+            btnModify.Size = new Size(79, 34);
             btnModify.TabIndex = 3;
             btnModify.Text = "Modify";
             btnModify.UseVisualStyleBackColor = true;
+            btnModify.Click += btnModify_Click;
             // 
             // btnRemove
             // 
             btnRemove.Dock = DockStyle.Fill;
-            btnRemove.Location = new Point(194, 277);
+            btnRemove.Enabled = false;
+            btnRemove.Location = new Point(178, 239);
             btnRemove.Name = "btnRemove";
-            btnRemove.Size = new Size(87, 34);
+            btnRemove.Size = new Size(79, 34);
             btnRemove.TabIndex = 4;
             btnRemove.Text = "Delete";
             btnRemove.UseVisualStyleBackColor = true;
+            btnRemove.Click += btnRemove_Click;
             // 
             // btnImport
             // 
             btnImport.Dock = DockStyle.Fill;
-            btnImport.Location = new Point(8, 317);
+            btnImport.Location = new Point(8, 279);
             btnImport.Name = "btnImport";
-            btnImport.Size = new Size(87, 34);
+            btnImport.Size = new Size(79, 34);
             btnImport.TabIndex = 5;
             btnImport.Text = "Import";
             btnImport.UseVisualStyleBackColor = true;
@@ -134,9 +140,10 @@
             // btnExport
             // 
             btnExport.Dock = DockStyle.Fill;
-            btnExport.Location = new Point(101, 317);
+            btnExport.Enabled = false;
+            btnExport.Location = new Point(93, 279);
             btnExport.Name = "btnExport";
-            btnExport.Size = new Size(87, 34);
+            btnExport.Size = new Size(79, 34);
             btnExport.TabIndex = 6;
             btnExport.Text = "Export";
             btnExport.UseVisualStyleBackColor = true;
@@ -144,10 +151,10 @@
             // picPanelPreview
             // 
             picPanelPreview.Dock = DockStyle.Fill;
-            picPanelPreview.Location = new Point(287, 48);
+            picPanelPreview.Location = new Point(263, 48);
             picPanelPreview.Name = "picPanelPreview";
             tableLayoutPanel1.SetRowSpan(picPanelPreview, 3);
-            picPanelPreview.Size = new Size(276, 303);
+            picPanelPreview.Size = new Size(253, 265);
             picPanelPreview.TabIndex = 7;
             picPanelPreview.TabStop = false;
             // 
@@ -155,11 +162,13 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(571, 359);
+            ClientSize = new Size(524, 321);
             Controls.Add(tableLayoutPanel1);
             Margin = new Padding(2, 1, 2, 1);
+            MinimumSize = new Size(540, 360);
             Name = "MainWindows";
             Text = "Sensor Panel Utility";
+            Load += MainWindows_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picPanelPreview).EndInit();
