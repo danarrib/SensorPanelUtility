@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace SensorPanelUtility.Models
 {
-    public class WidgetType
+    public enum WidgetType : int
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        None,
+        Text,
+        Image,
+        Bar,
+        Graph,
+        Gauge,
     }
 }

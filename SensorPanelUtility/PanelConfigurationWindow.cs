@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace SensorPanelUtility
         public PanelConfiguration CurrentPanelConfiguration { get; set; }
         private bool _hasUnsavedChanges;
         private bool _isSyncingToUI;
+
+        private PanelWindow _panelWindow;
 
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -43,21 +46,36 @@ namespace SensorPanelUtility
             SetScreenSaved();
         }
 
-        private void SyncModelToUI()
+
+
+        public void SyncModelToUI()
         {
             _isSyncingToUI = true;
-            txtName.Text = CurrentPanelConfiguration.Name;
-            txtSizeWidth.Text = CurrentPanelConfiguration.PanelWidth.ToString();
-            txtSizeHeight.Text = CurrentPanelConfiguration.PanelHeight.ToString();
-            txtPositionX.Text = CurrentPanelConfiguration.PanelX.ToString();
-            txtPositionY.Text = CurrentPanelConfiguration.PanelY.ToString();
-            sliderOpacity.Value = CurrentPanelConfiguration.Opacity;
-            chkAlwaysOnTop.Checked = CurrentPanelConfiguration.AlwaysOnTop;
 
-            if (CurrentPanelConfiguration.Id.IsNullOrWhiteSpace())
-            {
-                sliderOpacity.Value = 100;
-            }
+            if (txtName.Text != CurrentPanelConfiguration.Name)
+                txtName.Text = CurrentPanelConfiguration.Name;
+
+            if (txtSizeWidth.Text != CurrentPanelConfiguration.PanelWidth.ToString())
+                txtSizeWidth.Text = CurrentPanelConfiguration.PanelWidth.ToString();
+
+            if (txtSizeHeight.Text != CurrentPanelConfiguration.PanelHeight.ToString())
+                txtSizeHeight.Text = CurrentPanelConfiguration.PanelHeight.ToString();
+
+            if (txtPositionX.Text != CurrentPanelConfiguration.PanelX.ToString())
+                txtPositionX.Text = CurrentPanelConfiguration.PanelX.ToString();
+
+            if (txtPositionY.Text != CurrentPanelConfiguration.PanelY.ToString())
+                txtPositionY.Text = CurrentPanelConfiguration.PanelY.ToString();
+
+            if (sliderOpacity.Value != CurrentPanelConfiguration.Opacity)
+                sliderOpacity.Value = CurrentPanelConfiguration.Opacity;
+
+            if (chkAlwaysOnTop.Checked != CurrentPanelConfiguration.AlwaysOnTop)
+                chkAlwaysOnTop.Checked = CurrentPanelConfiguration.AlwaysOnTop;
+
+            if (btnBGColor.BackColor.ToArgb() != CurrentPanelConfiguration.BackgroundColor)
+                btnBGColor.BackColor = Color.FromArgb(CurrentPanelConfiguration.BackgroundColor);
+
             _isSyncingToUI = false;
         }
 
@@ -73,16 +91,41 @@ namespace SensorPanelUtility
             CurrentPanelConfiguration.PanelY = txtPositionY.Text.ToInt();
             CurrentPanelConfiguration.Opacity = sliderOpacity.Value;
             CurrentPanelConfiguration.AlwaysOnTop = chkAlwaysOnTop.Checked;
+            CurrentPanelConfiguration.BackgroundColor = btnBGColor.BackColor.ToArgb();
 
             SetScreenUnsaved();
+            ControlUI();
         }
 
         private void PanelConfigurationWindow_Load(object sender, EventArgs e)
         {
             _isSyncingToUI = false;
+
+            // If it's a new panel, set some defaults
+            if (CurrentPanelConfiguration.Id.IsNullOrWhiteSpace())
+            {
+                CurrentPanelConfiguration.Opacity = 100;
+                CurrentPanelConfiguration.PanelWidth = 500;
+                CurrentPanelConfiguration.PanelHeight = 500;
+                CurrentPanelConfiguration.BackgroundColor = Color.Black.ToArgb();
+            }
+
+            ShowThePanel();
             SyncModelToUI();
             ControlUI();
             SetScreenSaved();
+
+        }
+
+        private void ShowThePanel()
+        {
+            _panelWindow = new PanelWindow();
+            _panelWindow.PanelConfigurationWindow = this;
+            _panelWindow.Width = CurrentPanelConfiguration.PanelWidth;
+            _panelWindow.Height = CurrentPanelConfiguration.PanelHeight;
+            _panelWindow.Left = CurrentPanelConfiguration.PanelX;
+            _panelWindow.Top = CurrentPanelConfiguration.PanelY;
+            _panelWindow.Show();
         }
 
         private void ControlUI()
@@ -94,6 +137,21 @@ namespace SensorPanelUtility
             else
             {
                 lblScreenTitle.Text = "Edit Panel";
+            }
+
+            if (_panelWindow != null)
+            {
+                _panelWindow.Left = CurrentPanelConfiguration.PanelX;
+                _panelWindow.Top = CurrentPanelConfiguration.PanelY;
+                _panelWindow.Width = CurrentPanelConfiguration.PanelWidth;
+                _panelWindow.Height = CurrentPanelConfiguration.PanelHeight;
+                _panelWindow.Opacity = CurrentPanelConfiguration.Opacity / 100.0;
+
+                if (CurrentPanelConfiguration.BackgroundColor != 0)
+                    _panelWindow.BackColor = Color.FromArgb(CurrentPanelConfiguration.BackgroundColor);
+
+                if (_panelWindow.TopMost != CurrentPanelConfiguration.AlwaysOnTop)
+                    _panelWindow.TopMost = CurrentPanelConfiguration.AlwaysOnTop;
             }
         }
 
@@ -135,14 +193,6 @@ namespace SensorPanelUtility
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            if (_hasUnsavedChanges)
-            {
-                if (MessageBox.Show("You have unsaved changes. Are you sure you want to close this window?", "Unsaved Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                {
-                    return;
-                }
-            }
-
             Close();
         }
 
@@ -150,22 +200,45 @@ namespace SensorPanelUtility
         {
             if (_hasUnsavedChanges)
             {
-                if (MessageBox.Show("You have unsaved changes. Are you sure you want to close this window?", "Unsaved Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                var result = MessageBox.Show("You have unsaved changes. Do you want to save now?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.Cancel)
                 {
                     e.Cancel = true;
+                    return;
+                }
+                else if (result == DialogResult.Yes)
+                {
+                    SavePanelConfiguration();
                 }
             }
-
+            _panelWindow.Close();
+            _panelWindow.Dispose();
         }
 
-        private void SetScreenUnsaved()
+        public void SetScreenUnsaved()
         {
             _hasUnsavedChanges = true;
         }
 
-        private void SetScreenSaved()
+        public void SetScreenSaved()
         {
             _hasUnsavedChanges = false;
+        }
+
+        private void btnBGColor_Click(object sender, EventArgs e)
+        {
+            var color = colorDialog1.ShowDialog();
+            if (color == DialogResult.OK)
+            {
+                btnBGColor.BackColor = colorDialog1.Color;
+                SyncModelFromUI();
+                SetScreenUnsaved();
+            }
+        }
+
+        private void btnAddWidget_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

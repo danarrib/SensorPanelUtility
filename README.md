@@ -4,8 +4,8 @@ A free and Open Source alternative to AIDA64 Sensor Panel feature
 ## Roadmap
 
 ### Configuration UI
-- [ ] Create, Modify and Delete Panels
-- [ ] Panel details screen
+- [X] Create, Modify and Delete Panels
+- [X] Panel details screen
 - [ ] Widget details screen
 - [ ] Import and Export Panels
 - [ ] Panel Screenshot

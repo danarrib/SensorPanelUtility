@@ -16,6 +16,7 @@ namespace SensorPanelUtility.Models
         public int PanelY { get; set; }
         public int Opacity { get; set; }
         public bool AlwaysOnTop { get; set; }
+        public int BackgroundColor { get; set; }
         public List<PanelWidget> Widgets { get; set; }
     }
 }
