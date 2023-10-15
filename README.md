@@ -1,5 +1,5 @@
 # Sensor Panel Utility
-A free and Open Source alternative to AIDA64 Sensor Panel feature
+A free and open source alternative to AIDA64 sensor panel
 
 ## Roadmap
 

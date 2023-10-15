@@ -43,7 +43,8 @@
             label7 = new Label();
             dgvWidgets = new DataGridView();
             colIcon = new DataGridViewImageColumn();
-            Type = new DataGridViewTextBoxColumn();
+            colName = new DataGridViewTextBoxColumn();
+            colType = new DataGridViewTextBoxColumn();
             colX = new DataGridViewTextBoxColumn();
             colY = new DataGridViewTextBoxColumn();
             colVisible = new DataGridViewCheckBoxColumn();
@@ -214,7 +215,7 @@
             dgvWidgets.AllowUserToAddRows = false;
             dgvWidgets.AllowUserToDeleteRows = false;
             dgvWidgets.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvWidgets.Columns.AddRange(new DataGridViewColumn[] { colIcon, Type, colX, colY, colVisible });
+            dgvWidgets.Columns.AddRange(new DataGridViewColumn[] { colIcon, colName, colType, colX, colY, colVisible });
             tableLayoutPanel1.SetColumnSpan(dgvWidgets, 3);
             dgvWidgets.Dock = DockStyle.Fill;
             dgvWidgets.Location = new Point(335, 38);
@@ -231,13 +232,19 @@
             colIcon.Name = "colIcon";
             colIcon.ReadOnly = true;
             // 
-            // Type
+            // colName
             // 
-            Type.HeaderText = "Type";
-            Type.Name = "Type";
-            Type.ReadOnly = true;
-            Type.Resizable = DataGridViewTriState.True;
-            Type.SortMode = DataGridViewColumnSortMode.NotSortable;
+            colName.HeaderText = "Name";
+            colName.Name = "colName";
+            colName.ReadOnly = true;
+            // 
+            // colType
+            // 
+            colType.HeaderText = "Type";
+            colType.Name = "colType";
+            colType.ReadOnly = true;
+            colType.Resizable = DataGridViewTriState.True;
+            colType.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // colX
             // 
@@ -424,11 +431,6 @@
         private Button btnClose;
         private Label label7;
         private DataGridView dgvWidgets;
-        private DataGridViewImageColumn colIcon;
-        private DataGridViewTextBoxColumn Type;
-        private DataGridViewTextBoxColumn colX;
-        private DataGridViewTextBoxColumn colY;
-        private DataGridViewCheckBoxColumn colVisible;
         private Button btnAddWidget;
         private Button btnModifyWidget;
         private Button btnRemoveWidget;
@@ -439,5 +441,11 @@
         private Label label1;
         private Button btnBGColor;
         private ColorDialog colorDialog1;
+        private DataGridViewImageColumn colIcon;
+        private DataGridViewTextBoxColumn colName;
+        private DataGridViewTextBoxColumn colType;
+        private DataGridViewTextBoxColumn colX;
+        private DataGridViewTextBoxColumn colY;
+        private DataGridViewCheckBoxColumn colVisible;
     }
 }

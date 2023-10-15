@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SensorPanelUtility.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,5 +17,9 @@ namespace SensorPanelUtility
         {
             InitializeComponent();
         }
+
+        public PanelWidget PanelWidget { get; set; }
+
+
     }
 }

@@ -76,6 +76,22 @@ namespace SensorPanelUtility
             if (btnBGColor.BackColor.ToArgb() != CurrentPanelConfiguration.BackgroundColor)
                 btnBGColor.BackColor = Color.FromArgb(CurrentPanelConfiguration.BackgroundColor);
 
+            dgvWidgets.Rows.Clear();
+            if (CurrentPanelConfiguration.Widgets != null)
+            {
+                foreach (var widget in CurrentPanelConfiguration.Widgets)
+                {
+                    var index = dgvWidgets.Rows.Add();
+                    dgvWidgets.Rows[index].Cells["colName"].Value = widget.Name;
+                    dgvWidgets.Rows[index].Cells["colType"].Value = widget.WidgetType;
+                    dgvWidgets.Rows[index].Cells["colX"].Value = widget.WidgetX;
+                    dgvWidgets.Rows[index].Cells["colY"].Value = widget.WidgetY;
+                    dgvWidgets.Rows[index].Cells["colVisible"].Value = widget.Visible;
+
+                    dgvWidgets.Rows[index].Height = dgvWidgets.Rows[index].GetPreferredHeight(index, DataGridViewAutoSizeRowMode.AllCells, true);
+                }
+            }
+
             _isSyncingToUI = false;
         }
 
@@ -238,7 +254,15 @@ namespace SensorPanelUtility
 
         private void btnAddWidget_Click(object sender, EventArgs e)
         {
-
+            var widgetConfigurationWindow = new WidgetConfigurationWindow();
+            var newWidget = new PanelWidget();
+            if (CurrentPanelConfiguration.Widgets == null)
+                CurrentPanelConfiguration.Widgets = new();
+            CurrentPanelConfiguration.Widgets.Add(newWidget);
+            widgetConfigurationWindow.PanelWidget = newWidget;
+            widgetConfigurationWindow.ShowDialog();
+            SyncModelToUI();
+            ControlUI();
         }
     }
 }
